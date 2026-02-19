@@ -1,0 +1,193 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", sans-serif;
+
+  --color-bg-primary: #181818;
+  --color-bg-secondary: #121212;
+  --color-bg-tertiary: #282828;
+  --color-border: #404040;
+  --color-text-primary: #e6e6e6;
+  --color-text-white: #ffffff;
+  --color-accent-blue: #1175d5;
+  --color-accent-green: #00a878;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #ffffff;
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* ── Hero background blobs (SVG groups) ── */
+  .hero-blob {
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  .hero-blob--1 { animation: blob-breathe 14s ease-in-out infinite; }
+  .hero-blob--2 { animation: blob-breathe 11s ease-in-out -4s infinite; }
+  .hero-blob--3 { animation: blob-breathe 12s ease-in-out -2s infinite; }
+  .hero-blob--4 { animation: blob-breathe 18s ease-in-out -6s infinite; }
+  .hero-blob--5 { animation: blob-breathe 16s ease-in-out -8s infinite; }
+
+  .hero-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(24, 24, 24, 0) 0%,
+      rgba(24, 24, 24, 1) 85%
+    );
+    opacity: 0.25;
+    pointer-events: none;
+  }
+
+  /* ── Navigation link ── */
+  .nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.375rem;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  /* Vertical blue bar at the icon's outward edge */
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    top: -10%;
+    height: 120%;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, #1175d5, transparent);
+    box-shadow: 0 0 12px 4px rgba(17, 117, 213, 0.6);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .nav-link--left::after {
+    right: -1px;
+  }
+
+  .nav-link--right::after {
+    left: -1px;
+  }
+
+  .nav-link:hover::after {
+    opacity: 1;
+  }
+
+  /*
+    Single glow element that covers the icon area AND the expanding label.
+    Anchored to the icon-side edge, clips the label via max-width.
+    On hover, max-width grows to reveal the label outward.
+  */
+  .nav-link__glow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 4px;
+    opacity: 0;
+    transition: max-width 0.35s ease, opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .nav-link:hover .nav-link__glow {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Docs — anchored right, label expands left */
+  .nav-link__glow--left {
+    right: 0;
+    width: calc(100% + 12rem);
+    max-width: 100%;
+    padding-right: 3.25rem;
+    justify-content: flex-end;
+    background: linear-gradient(
+      to left,
+      rgba(10, 155, 252, 0.2),
+      transparent
+    );
+  }
+
+  .nav-link:hover .nav-link__glow--left {
+    max-width: calc(100% + 12rem);
+  }
+
+  /* GitHub — anchored left, label expands right */
+  .nav-link__glow--right {
+    left: 0;
+    width: calc(100% + 12rem);
+    max-width: 100%;
+    padding-left: 3.25rem;
+    justify-content: flex-start;
+    background: linear-gradient(
+      to right,
+      rgba(10, 155, 252, 0.2),
+      transparent
+    );
+  }
+
+  .nav-link:hover .nav-link__glow--right {
+    max-width: calc(100% + 12rem);
+  }
+
+  .nav-link__label {
+    white-space: nowrap;
+    font-size: 0.875rem;
+    color: white;
+    padding: 0 0.5rem;
+  }
+
+  /* ── CTA Button ── */
+  .cta-button {
+    background-color: var(--color-bg-primary);
+    border: 2px solid var(--color-border);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: 1.25rem;
+    padding: 0.875rem 1.25rem;
+    cursor: pointer;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .cta-button:hover {
+    border-color: var(--color-accent-blue);
+    box-shadow: 0 0 16px rgba(17, 117, 213, 0.45),
+      0 4px 4px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Keyframes must live outside @layer for Tailwind v4 compatibility */
+@keyframes blob-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
